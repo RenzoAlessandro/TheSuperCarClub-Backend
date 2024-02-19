@@ -5,8 +5,8 @@ const modelCarSchema = new Schema({
     brand:{
         type: String, 
         required: true,
-        minlength: 4,
-        maxlength: 20,
+        minlength: 3,
+        maxlength: 15,
         trim: true
     },
 
@@ -14,7 +14,7 @@ const modelCarSchema = new Schema({
         type: String, 
         required: true,
         minlength: 4,
-        maxlength: 20,
+        maxlength: 30,
         trim: true
     },
 
@@ -30,7 +30,7 @@ const modelCarSchema = new Schema({
         type: String, 
         required: true,
         minlength: 3,
-        maxlength: 20,
+        maxlength: 15,
         trim: true
     },
 
@@ -38,7 +38,7 @@ const modelCarSchema = new Schema({
         type: String, 
         required: false,
         minlength: 4,
-        maxlength: 14,
+        maxlength: 12,
         trim: true,
         default: 'Automático',
     },
@@ -64,20 +64,28 @@ const modelCarSchema = new Schema({
         type: Number,
         required: false,
         min: 100,
-        max: 1000,
+        max: 1500,
         default: 200,
     },
 
     de0a60MPH:{
         type: Number,
         required: false,
-        min: 0,
-        max: 10,
+        min: 0.0,
+        max: 10.0,
         default: 0.0,
     },
 
-    year:{
+    seats:{
         type: Number,
+        required: false,
+        min: 1,
+        max: 10,
+        default: 4,
+    },
+
+    year:{
+        type: Date,
         required: false,
     },
 
@@ -90,12 +98,12 @@ const modelCarSchema = new Schema({
         default: '#FFFFFF'
     },
 
-    seats:{
+    ratingCount:{
         type: Number,
         required: false,
-        min: 1,
-        max: 9,
-        default: 4,
+        min: 0,
+        max: 5,
+        default: 0,
     },
 
     price24h:{
@@ -104,6 +112,7 @@ const modelCarSchema = new Schema({
         min: 100,
         max: 1500,
         default: 850,
+        required: false
     },
 
     carImage:{
@@ -116,18 +125,9 @@ const modelCarSchema = new Schema({
     description:{
         type: String,
         required: false,
-        minlength: 4,
         maxlength: 2000,
         trim: true,
         default: 'Sin descripción.',
-    },
-
-    ratingCount:{
-        type: Number,
-        required: false,
-        min: 0,
-        max: 5,
-        default: 0,
     },
 
     active:{

@@ -10,8 +10,8 @@ const userSchema = new Schema({
     firstName:{
         type: String,
         require: true,
-        minlength: 4,
-        maxlength: 60,
+        minlength: 3,
+        maxlength: 50,
         trim: true,
         validate: {
             validator: function(firstName){
@@ -24,8 +24,8 @@ const userSchema = new Schema({
     lastName:{
         type: String,
         require: true,
-        minlength: 4,
-        maxlength: 60,
+        minlength: 3,
+        maxlength: 50,
         trim: true,
         validate: {
             validator: function(lastName){
@@ -42,6 +42,7 @@ const userSchema = new Schema({
         index: true,
         lowercase: true,
         trim: true,
+        minlength: 7,
         maxlength: 80,
         validate: {
             validator: function(email){
@@ -55,7 +56,7 @@ const userSchema = new Schema({
         type: String,
         required: true,
         minlength: 4,
-        maxlength: 65,
+        maxlength: 60,
         trim: true
     },
 
@@ -65,6 +66,11 @@ const userSchema = new Schema({
         minlength: 4,
         maxlength: 30,
         trim: true,
+    },
+
+    bornDate:{
+        type: Date,
+        required: true,
     },
 
     age:{
@@ -78,7 +84,7 @@ const userSchema = new Schema({
         type: String,
         required: false,
         trim: true,
-        default: 'https://raw.githubusercontent.com/RenzoAlessandro/TheSuperCarClub-Assets/main/others/profile-picture.webp',
+        default: 'https://collaborate.pega.com/sites/default/files/pega-user-image/457/REG-456516.png',
     },
 
     active:{
