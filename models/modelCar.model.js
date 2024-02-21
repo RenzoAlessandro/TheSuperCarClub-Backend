@@ -13,6 +13,7 @@ const modelCarSchema = new Schema({
     model:{
         type: String, 
         required: true,
+        unique  : true,
         minlength: 4,
         maxlength: 30,
         trim: true
@@ -54,15 +55,15 @@ const modelCarSchema = new Schema({
 
     maxSpeed:{
         type: Number,
-        required: false,
+        required: true,
         min: 100,
         max: 600,
-        default: 100,
+        default: 101,
     },
 
     horsePowerHP:{
         type: Number,
-        required: false,
+        required: true,
         min: 100,
         max: 1500,
         default: 200,
@@ -70,7 +71,7 @@ const modelCarSchema = new Schema({
 
     de0a60MPH:{
         type: Number,
-        required: false,
+        required: true,
         min: 0.0,
         max: 10.0,
         default: 0.0,
@@ -78,7 +79,7 @@ const modelCarSchema = new Schema({
 
     seats:{
         type: Number,
-        required: false,
+        required: true,
         min: 1,
         max: 10,
         default: 4,
@@ -91,7 +92,6 @@ const modelCarSchema = new Schema({
 
     color:{
         type: String,
-        required: false,
         minlength: 3,
         maxlength: 8,
         trim: true,
@@ -100,7 +100,7 @@ const modelCarSchema = new Schema({
 
     ratingCount:{
         type: Number,
-        required: false,
+        required: true,
         min: 0,
         max: 5,
         default: 0,
@@ -124,8 +124,7 @@ const modelCarSchema = new Schema({
 
     description:{
         type: String,
-        required: false,
-        maxlength: 2000,
+        maxlength: 20000,
         trim: true,
         default: 'Sin descripción.',
     },
