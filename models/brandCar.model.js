@@ -37,4 +37,4 @@ const brandCarSchema = new Schema({
     }
 })
 
-module.exports = mongoose.model('Brandcars', brandCarSchema)
+module.exports = mongoose.model('brandcars', brandCarSchema)

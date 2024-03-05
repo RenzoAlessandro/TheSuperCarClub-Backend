@@ -23,7 +23,7 @@ async function getUsers(req, res){
         // Traer un solo usuario
         const id = req.params.idUser;
         if(id){
-            const user = await User.findById(id, {password: 0});
+            const user = await User.findById(id, {password: 0, __v:0}).populate("location");
             if(!user){
                 return res.status(404).send({
                     ok: false,
@@ -37,8 +37,22 @@ async function getUsers(req, res){
             })
         }
 
+        const limit = parseInt(req.query.limit) || 7;
+        const page = parseInt(req.query.page) || 0;
+
         // Traer todos los usuarios
-        const users = await User.find();
+        // En caso tengamos varios await podemos lanzarlos como threads al mismo tiempo
+        const [total, users] = await Promise.all([
+            User.countDocuments(),
+            User.find()
+                .populate("location")
+                .limit(limit)
+                .skip(page * limit)
+                .collation({locale: 'es'})
+                .sort({firstName:1})
+                .select({ password: 0, __v:0})
+        ])
+
         if(!users.length){
             return res.status(404).send({
                 ok: false,
@@ -47,6 +61,7 @@ async function getUsers(req, res){
         }
         return res.send({
             users,
+            total,
             ok: true,
             message: 'Usuarios obtenidos correctamente'
         })
@@ -64,6 +79,11 @@ async function getUsers(req, res){
 async function createUser(req, res){
     try {
         const user = new User(req.body);
+
+        if(req.file?.filename){
+            user.userImage = req.file.filename
+        }
+
         // Encriptar contraseña con bcrypt
         user.password = await bcrypt.hash(user.password, salRounds);
         console.log(user);
@@ -91,20 +111,17 @@ async function createUser(req, res){
 // ELIMINAR USUARIO (DEL)
 async function deleteUser(req, res){
     try {
-        console.log(req.user);
-
-        //Chekeo su el role del usuario NO ES ADMIN, no lo dejo continuar
-        if(req.user.role !== 'ADMIN_ROLE'){
-            return res.status(401).send({
-                ok: false,
-                message: "No tiene permisos para realizar esta acción"
-            })
-        }
-
         const id = req.params.idUser;
         const userDeleted = await User.findByIdAndDelete(id);
 
-        res.send({
+        if(!userDeleted){
+            return res.status(404).send({
+                ok: false,
+                message: "Usuario no encontrado"
+            })
+        }
+
+        res.status(200).send({
             user: userDeleted,
             ok: true,
             message: "Usuario borrado correctamente"
@@ -125,12 +142,25 @@ async function updateUser(req, res){
     try {
         const id = req.params.idUser;
         const nuevosValores = req.body;
+
+        if(req.file?.filename){
+            nuevosValores.userImage = req.file.filename
+        }
+
+        const userExist = await User.findById(id);
+        if(!userExist){
+            return res.status(404).send({
+                ok: false,
+                message: "Usuario no encontrado"
+            })
+        }
+
         const userUpdated = await User.findByIdAndUpdate(id, nuevosValores, {new: true});
 
-        res.send({
+        res.status(200).send({
             user: userUpdated,
             ok: true,
-            message: "El usuario fue actualizado",
+            message: "El usuario fue actualizado correctamente",
         })
         
     } catch (error) {
@@ -138,6 +168,33 @@ async function updateUser(req, res){
         res.send({
             ok: false,
             message: "El usuario no se pudo actualizar"
+        })
+    }
+}
+
+async function searchUser(req, res){
+    try {
+        const search = new RegExp(req.params.search, 'i');
+        
+        const users = await User.find({
+            $or:[
+                {firstName: search },
+                {email: search }
+            ]
+        }).populate("location").select({ password: 0, __v:0})
+
+        res.status(200).send({
+            users,
+            ok: true,
+            message: "Usuarios encontrados",
+        })
+
+
+    } catch (error) {
+        console.log(error);
+        res.send({
+            ok: false,
+            message: "No se pudo buscar el usuario"
         })
     }
 }
@@ -154,7 +211,7 @@ async function login(req, res){
             })
         }
 
-        const user = await User.findOne({email: email.toLowerCase()});
+        const user = await User.findOne({email: email.toLowerCase()}).populate("location");;
         // Si no existe el usuario
         if(!user){
             return res.status(404).send({
@@ -197,5 +254,6 @@ module.exports = {
     createUser,
     deleteUser,
     updateUser,
+    searchUser,
     login
 }

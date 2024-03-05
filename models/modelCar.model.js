@@ -3,18 +3,16 @@ const Schema = mongoose.Schema;
 
 const modelCarSchema = new Schema({
     brand:{
-        type: String, 
-        required: true,
-        minlength: 3,
-        maxlength: 15,
-        trim: true
+        type: Schema.Types.ObjectId,
+        ref: "brandcars",
+        require: true
     },
 
     model:{
         type: String, 
         required: true,
         unique  : true,
-        minlength: 4,
+        minlength: 2,
         maxlength: 30,
         trim: true
     },
@@ -28,29 +26,21 @@ const modelCarSchema = new Schema({
     },
 
     type:{
-        type: String, 
-        required: true,
-        minlength: 3,
-        maxlength: 15,
-        trim: true
+        type: Schema.Types.ObjectId,
+        ref: "typecars",
+        required: true
     },
 
     transmission:{
-        type: String, 
-        required: false,
-        minlength: 4,
-        maxlength: 12,
-        trim: true,
-        default: 'Automático',
+        type: Schema.Types.ObjectId,
+        ref: "transmission",
+        required: true
     },
 
     fuel:{
-        type: String, 
-        required: false,
-        minlength: 4,
-        maxlength: 10,
-        trim: true,
-        default: 'Gasolina',
+        type: Schema.Types.ObjectId,
+        ref: "fuel",
+        required: true
     },
 
     maxSpeed:{
@@ -65,7 +55,7 @@ const modelCarSchema = new Schema({
         type: Number,
         required: true,
         min: 100,
-        max: 1500,
+        max: 2000,
         default: 200,
     },
 
@@ -118,8 +108,7 @@ const modelCarSchema = new Schema({
     carImage:{
         type: String,
         required: false,
-        trim: true,
-        default: 'https://banner2.cleanpng.com/20190425/pv/kisspng-car-portable-network-graphics-computer-icons-vecto-sedan-car-model-svg-png-icon-free-download-1-7-9-5cc26021e6e465.3158713415562424659457.jpg',
+        trim: true
     },
 
     description:{
@@ -139,6 +128,11 @@ const modelCarSchema = new Schema({
         type: Boolean,
         required: false,
         default: false,
+    },
+
+    createdAt: {
+        type: Date,
+        default: Date.now // Sin los parentesis como en JS
     }
 })
 

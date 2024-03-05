@@ -61,11 +61,9 @@ const userSchema = new Schema({
     },
 
     location:{
-        type: String,
-        require: true,
-        minlength: 4,
-        maxlength: 30,
-        trim: true,
+        type: Schema.Types.ObjectId,
+        ref: "location",
+        required: true
     },
 
     bornDate:{
@@ -83,8 +81,7 @@ const userSchema = new Schema({
     userImage:{
         type: String,
         required: false,
-        trim: true,
-        default: 'https://collaborate.pega.com/sites/default/files/pega-user-image/457/REG-456516.png',
+        trim: true
     },
 
     active:{

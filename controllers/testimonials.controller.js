@@ -5,7 +5,7 @@ async function getTestimonials(req, res){
         const id = req.params.idtestimonial;
 
         if(id){
-            const testimonial = await Testimonial.findById(id);
+            const testimonial = await Testimonial.findById(id, {__v:0});
 
             if(!testimonial){
                 return res.status(404).send({
@@ -21,7 +21,7 @@ async function getTestimonials(req, res){
             });
         }
 
-        const testimonials = await Testimonial.find();
+        const testimonials = await Testimonial.find().select({__v:0});
 
         if(!testimonials.length){
             return res.status(404).send({

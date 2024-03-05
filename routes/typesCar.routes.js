@@ -5,4 +5,6 @@ const typeCarController = require('../controllers/typesCar.controller');
 
 router.get('/types/:idTypeCar?', typeCarController.getTypeCars);
 
+router.post('/types', typeCarController.postTypeCars);
+
 module.exports = router;

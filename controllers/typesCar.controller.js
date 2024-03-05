@@ -6,7 +6,7 @@ async function getTypeCars(req, res){
         const id = req.params.idTypeCar;
 
         if(id){
-            const typeCar = await TypeCar.findById(id);
+            const typeCar = await TypeCar.findById(id, {__v:0});
 
             if(!typeCar){
                 return res.status(404).send({
@@ -21,7 +21,7 @@ async function getTypeCars(req, res){
             });
         }
 
-        const typesCar = await TypeCar.find();
+        const typesCar = await TypeCar.find().select({__v:0});
 
         if(!typesCar.length){
             return res.status(404).send({
@@ -46,6 +46,27 @@ async function getTypeCars(req, res){
     }
 }
 
+async function postTypeCars(req, res){
+    try {
+        const typeCar = new TypeCar(res.body);
+        const typeCarSaved = await typeCar.save();
+
+        return res.status(201).send({
+            typeCar: typeCarSaved,
+            ok: true,
+            message: "Tipo de vehículo creado correctamente"
+        })
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            ok: false,
+            message: "Error de servidor"
+        })
+    }
+}
+
 module.exports = {
-    getTypeCars
+    getTypeCars,
+    postTypeCars
 }
