@@ -4,6 +4,7 @@
   "description": "El backend del proyecto de EIT",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Renzo Alessandro Sucari Velasquez",
