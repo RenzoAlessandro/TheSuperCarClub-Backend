@@ -1,5 +1,5 @@
 
-# TheSuperCarClub - Frontend
+# TheSuperCarClub - Backend
 
 TheSuperCarClub es una aplicación web para la renta de autos. Proporciona a los usuarios una plataforma intuitiva para buscar, comparar y reservar vehículos deportivos y lujosos de una manera sencilla y eficiente.
 
